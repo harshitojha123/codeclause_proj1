@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Background Remover</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Labrada:ital@1&amp;display=swap" rel="stylesheet">
+    <style>
+      body {
+    background-image:url(https://wallpapercave.com/wp/wp2838678.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 32px auto;
+    padding: 32px;
+    margin: 0 auto;
+    text-align: center;
+    font-family: Georgia, "Times New Roman", Times, serif;
+  
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  h1,
+  .button {
+    font-family: "Helvetica Neue", sans-serif;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  
+  label,
+  input[type="file"] {
+    transition: all 0.3s ease-in-out;
+  }
+  
+  label:hover,
+  input[type="file"]:hover {
+    color: #8e3e77;
+    cursor: pointer;
+  }
+  
+  .button {
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #b275db;
+    color: #ffffff;
+    border: none;
+    padding: 16px 32px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .button:hover {
+    background-color: #9000fe;
+  }
+  
+  #result {
+    margin-top: 48px;
+    font-size: 24px;
+    line-height: 1.5;
+  }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+      <div class="container-fluid text-center">
+        <a class="navbar-brand mx-auto" href="#">Image Background Remover</a>
+      </div>
+    </nav>
+
+    <div class="container">
+      <form>
+        <label for="file">Upload image:</label>
+        <br />
+        <input type="file" id="file" name="file" />
+        <br /><br />
+        <button type="button" class="button" onclick="removeBackground()">
+          Remove background
+        </button>
+      </form>
+      <div id="result"></div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+    <script >
+      function removeBackground() {
+    var fileInput = document.getElementById("file");
+    var file = fileInput.files[0];
+    var formData = new FormData();
+    formData.append("image_file", file);
+    fetch("https://api.remove.bg/v1.0/removebg", {
+      method: "POST",
+      headers: {
+        "X-Api-Key": "o8jt9NHnMwDAKZGJSqRZGadz"
+      },
+      body: formData
+    })
+    .then(response => response.blob())
+    .then(blob => {
+      var url = URL.createObjectURL(blob);
+      var resultDiv = document.getElementById("result");
+      var image = new Image();
+      image.src = url;
+      resultDiv.appendChild(image);
+  
+      // Create download link
+      var link = document.createElement("a");
+    link.href = url;
+    link.download = "background_removed.png";
+    var span = document.createElement("span");
+    span.innerHTML = "Download <i class='fa fa-download'></i>";
+    link.appendChild(span);
+    resultDiv.appendChild(link);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  }
+  
+  
+    </script>
+
+  </body>
+</html
